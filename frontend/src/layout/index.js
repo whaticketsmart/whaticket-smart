@@ -32,7 +32,7 @@ import { i18n } from "../translate/i18n";
 import toastError from "../errors/toastError";
 import AnnouncementsPopover from "../components/AnnouncementsPopover";
 
-import logo from "../assets/logo.png";
+//import logo from "../assets/logo.png";
 import { SocketContext } from "../context/Socket/SocketContext";
 import ChatPopover from "../pages/Chat/ChatPopover";
 
@@ -329,6 +329,11 @@ const LoggedInLayout = ({ children, themeToggle }) => {
   if (loading) {
     return <BackdropLoading />;
   }
+  
+  	const logo = `${process.env.REACT_APP_BACKEND_URL}/public/logotipos/interno.png`;
+    const randomValue = Math.random(); // Generate a random number
+  
+    const logoWithRandom = `${logo}?r=${randomValue}`;
 
   return (
     <div className={classes.root}>
@@ -344,7 +349,7 @@ const LoggedInLayout = ({ children, themeToggle }) => {
         open={drawerOpen}
       >
         <div className={classes.toolbarIcon}>
-          <img src={logo} className={classes.logo} alt="logo" />
+          <img src={logoWithRandom} style={{ margin: "0 auto" , width: "50%"}} alt={`${process.env.REACT_APP_NAME_SYSTEM}`} />
           <IconButton onClick={() => setDrawerOpen(!drawerOpen)}>
             <ChevronLeftIcon />
           </IconButton>

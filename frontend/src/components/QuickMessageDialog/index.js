@@ -247,6 +247,27 @@ const QuickMessageDialog = ({ open, onClose, quickemessageId, reload }) => {
                                             fullWidth
                                         />
                                     </Grid>
+									{(profile === "admin") && (
+									  <Grid xs={12} item>
+										<FormControl variant="outlined" margin="dense" fullWidth>
+										  <InputLabel id="geral-selection-label">
+											{i18n.t("quickMessages.dialog.geral")}
+										  </InputLabel>
+										  <Field
+											as={Select}
+											label={i18n.t("quickMessages.dialog.geral")}
+											placeholder={i18n.t("quickMessages.dialog.geral")}
+											labelId="geral-selection-label"
+											id="geral"
+											name="geral"
+											error={touched.geral && Boolean(errors.geral)}
+										  >
+											<MenuItem value={true}>Ativo</MenuItem>
+											<MenuItem value={false}>Inativo</MenuItem>
+										  </Field>
+										</FormControl>
+									  </Grid>
+									  )}
                                     <Grid xs={12} item>
                                         <Field
                                             as={TextField}
