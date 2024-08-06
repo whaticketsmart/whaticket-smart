@@ -2,6 +2,7 @@ import * as Yup from "yup";
 import { Request, Response } from "express";
 import { getIO } from "../libs/socket";
 
+import Contact from "../models/Contact";
 import ListContactsService from "../services/ContactServices/ListContactsService";
 import CreateContactService from "../services/ContactServices/CreateContactService";
 import ShowContactService from "../services/ContactServices/ShowContactService";
@@ -92,6 +93,19 @@ export const store = async (req: Request, res: Response): Promise<Response> => {
   const validNumber = await CheckContactNumber(newContact.number, companyId);
   const number = validNumber.jid.replace(/\D/g, "");
   newContact.number = number;
+
+    // Check if the contact already exists
+    const existingContact = await Contact.findOne({
+      where: {
+        number: newContact.number,
+        companyId
+      }
+    });
+    
+    if (existingContact) {
+      // Contact already exists, send the existing contact data as the response
+      return res.status(200).json({ alreadyExists: true, existingContact });
+    }
 
   /**
    * Código desabilitado por demora no retorno

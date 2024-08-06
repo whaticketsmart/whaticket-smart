@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Link as RouterLink } from "react-router-dom";
 
 import Button from "@material-ui/core/Button";
@@ -12,9 +12,10 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { versionSystem } from "../../../package.json";
 import { i18n } from "../../translate/i18n";
+import api from "../../services/api";
 import { nomeEmpresa } from "../../../package.json";
 import { AuthContext } from "../../context/Auth/AuthContext";
-import logo from "../../assets/logo.png";
+//import logo from "../../assets/logo.png";
 
 
 const Copyright = () => {
@@ -75,15 +76,39 @@ const Login = () => {
 	const [user, setUser] = useState({ email: "", password: "" });
 
 	const { handleLogin } = useContext(AuthContext);
+	const [viewregister, setviewregister] = useState('disabled');
 
 	const handleChangeInput = e => {
 		setUser({ ...user, [e.target.name]: e.target.value });
 	};
+	
+	    useEffect(() => {
+    	fetchviewregister();
+  	}, []);
+	
+		const fetchviewregister = async () => {
+  
+ 
+    try {
+    	const responsev = await api.get("/settings/viewregister");
+      	const viewregisterX = responsev?.data?.value;
+      	// console.log(viewregisterX);
+      	setviewregister(viewregisterX);
+    	} catch (error) {
+    		console.error('Error retrieving viewregister', error);
+    	}
+  	};
+
 
 	const handlSubmit = e => {
 		e.preventDefault();
 		handleLogin(user);
 	};
+	
+	const logo = `${process.env.REACT_APP_BACKEND_URL}/public/logotipos/login.png`;
+    const randomValue = Math.random(); // Generate a random number
+  
+    const logoWithRandom = `${logo}?r=${randomValue}`;
 
 	return (
 		<div className={classes.root}>
@@ -91,7 +116,7 @@ const Login = () => {
 			<CssBaseline/>
 			<div className={classes.paper}>
 				<div>
-					<img style={{ margin: "0 auto", width: "100%" }} src={logo} alt="Whats" />
+					<img style={{ margin: "0 auto", width: "80%" }} src={logoWithRandom} alt={`${process.env.REACT_APP_NAME_SYSTEM}`} />
 				</div>
 				{/*<Typography component="h1" variant="h5">
 					{i18n.t("login.title")}
@@ -131,6 +156,7 @@ const Login = () => {
 						</Link>
 					  </Grid>
 					</Grid>
+				
 					
 					<Button
 						type="submit"
@@ -141,7 +167,9 @@ const Login = () => {
 					>
 						{i18n.t("login.buttons.submit")}
 					</Button>
-					{ <Grid container>
+                    {viewregister === "enabled" && (
+                    <>
+					<Grid container>
 						<Grid item>
 							<Link
 								href="#"
@@ -152,7 +180,11 @@ const Login = () => {
 								{i18n.t("login.buttons.register")}
 							</Link>
 						</Grid>
-					</Grid> }
+					</Grid>
+                    </>
+                    )}
+				
+					
 				</form>
 			
 			</div>

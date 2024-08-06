@@ -16,7 +16,7 @@ import WhatsAppIcon from "@material-ui/icons/WhatsApp";
 import SearchIcon from "@material-ui/icons/Search";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
-
+import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
 import EditIcon from "@material-ui/icons/Edit";
@@ -24,7 +24,7 @@ import api from "../../services/api";
 import TableRowSkeleton from "../../components/TableRowSkeleton";
 import ContactModal from "../../components/ContactModal";
 import ConfirmationModal from "../../components/ConfirmationModal/";
-
+import CancelIcon from "@material-ui/icons/Cancel";
 import { i18n } from "../../translate/i18n";
 import MainHeader from "../../components/MainHeader";
 import Title from "../../components/Title";
@@ -228,6 +228,26 @@ const Contacts = () => {
       toastError(err);
     }
   };
+  
+function getDateLastMessage(contact) {
+    if (!contact) return null;
+    if (!contact.tickets) return null;
+
+    if (contact.tickets.length > 0) {
+        const date = new Date(contact.tickets[contact.tickets.length - 1].updatedAt);
+
+        const day = date.getDate() > 9 ? date.getDate() : `0${date.getDate()}`;
+        const month = (date.getMonth() + 1) > 9 ? (date.getMonth() + 1) : `0${date.getMonth() + 1}`;
+        const year = date.getFullYear().toString().slice(-2);
+
+        const hours = date.getHours() > 9 ? date.getHours() : `0${date.getHours()}`;
+        const minutes = date.getMinutes() > 9 ? date.getMinutes() : `0${date.getMinutes()}`;
+
+        return `${day}/${month}/${year} ${hours}:${minutes}`;
+    }
+
+    return null;
+}
 
   const loadMore = () => {
     setPageNumber((prevState) => prevState + 1);
@@ -355,6 +375,10 @@ const Contacts = () => {
                 {i18n.t("contacts.table.email")}
               </TableCell>
               <TableCell align="center">
+              {"Última Interação"}
+              </TableCell>
+			  <TableCell align="center">{"Status"}</TableCell>
+              <TableCell align="center">
                 {i18n.t("contacts.table.actions")}
               </TableCell>
             </TableRow>
@@ -369,6 +393,22 @@ const Contacts = () => {
                   <TableCell>{contact.name}</TableCell>
                   <TableCell align="center">{contact.number}</TableCell>
                   <TableCell align="center">{contact.email}</TableCell>
+                                    <TableCell align="center">
+                                        {getDateLastMessage(contact)}
+                                    </TableCell>
+                                    <TableCell align="center">
+                                        {contact.active ? (
+                                            <CheckCircleIcon
+                                                style={{ color: "green" }}
+                                                fontSize="small"
+                                            />
+                                        ) : (
+                                            <CancelIcon
+                                                style={{ color: "red" }}
+                                                fontSize="small"
+                                            />
+                                        )}
+                                    </TableCell>
                   <TableCell align="center">
                     <IconButton
                       size="small"

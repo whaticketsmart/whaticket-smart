@@ -27,6 +27,7 @@ type StoreData = {
   shortcode: string;
   message: string;
   userId: number | number;
+  geral: boolean;  
 };
 
 type FindParams = {

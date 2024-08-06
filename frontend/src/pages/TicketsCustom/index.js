@@ -6,7 +6,6 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import TicketsManager from "../../components/TicketsManagerTabs/";
 import Ticket from "../../components/Ticket/";
-import logo from "../../assets/logo.png"; //PLW DESIGN LOGO//
 import { i18n } from "../../translate/i18n";
 
 const useStyles = makeStyles(theme => ({
@@ -45,6 +44,11 @@ const useStyles = makeStyles(theme => ({
 	},
 }));
 
+const logo = `${process.env.REACT_APP_BACKEND_URL}/public/logotipos/login.png`;
+const randomValue = Math.random(); // Generate a random number
+  
+const logoWithRandom = `${logo}?r=${randomValue}`;
+
 const TicketsCustom = () => {
 	const classes = useStyles();
 	const { ticketId } = useParams();
@@ -63,11 +67,9 @@ const TicketsCustom = () => {
 							</>
 						) : (
 							<Paper square variant="outlined" className={classes.welcomeMsg}>
-							{/* PLW DESIGN LOGO */}
 							<div>
-							<center><img style={{ margin: "0 auto", width: "70%" }} src={logo} alt="logologin" /></center>
+							<center><img style={{ margin: "0 auto", width: "80%" }} src={logoWithRandom} alt={`${process.env.REACT_APP_NAME_SYSTEM}`} /></center>
 							</div>
-							{/* PLW DESIGN LOGO */}
 							{/*<span>{i18n.t("chat.noTicketMessage")}</span>*/}
 							</Paper>
 						)}
